@@ -16,6 +16,48 @@ npm run dev
 
 Set `DATABASE_URL`, `AUTH_TOKEN`, and `CRON_SECRET` in `.env.local`. The schema is created on the first API request. No secret is stored in this repository.
 
+## Use the local dashboard
+
+1. Copy `.env.example` to `.env.local` and make sure the values are loaded there.
+2. Start the app with `npm run dev`.
+3. Open [http://localhost:3000](http://localhost:3000).
+4. In **Access token**, paste the exact value after `AUTH_TOKEN=` from `.env.local`. Do not include `Bearer `; the dashboard adds that prefix for API requests.
+5. In **CSV payload**, paste CSV text with an `email,name` header and one record per line:
+
+```csv
+email,name
+maya@example.com,Maya Chen
+sam@example.com,Sam Rivera
+lee@example.com,Lee Morgan
+```
+
+6. Select **Queue import**. The browser immediately receives an accepted response. The import appears as `queued` until the worker processes it, then changes to `completed` with an item count. The same CSV and generated idempotency key can be submitted again without creating duplicate digest rows.
+
+The `CRON_SECRET` is not entered in the browser. It authenticates the scheduled worker request from Vercel and belongs in Vercel Environment Variables.
+
+```mermaid
+sequenceDiagram
+  actor User
+  participant UI as Dashboard
+  participant API as POST /api/imports
+  participant DB as PostgreSQL
+  participant Cron as Vercel Cron
+  participant Worker as Background worker
+
+  User->>UI: Enter AUTH_TOKEN and CSV
+  UI->>API: Bearer AUTH_TOKEN + CSV + idempotency key
+  API->>DB: Authenticate account and insert queued import
+  DB-->>API: Import ID
+  API-->>UI: 202 Accepted immediately
+  Cron->>Worker: Trigger with CRON_SECRET nightly
+  Worker->>DB: Claim queued import
+  Worker->>DB: Insert digest rows with unique constraint
+  DB-->>Worker: Same result on safe retry
+  Worker->>DB: Mark completed or failed with last_error
+  UI->>API: Poll import status
+  API-->>UI: Status, attempts, count, or actionable error
+```
+
 ## API
 
 All import routes require `Authorization: Bearer <AUTH_TOKEN>`. Missing or invalid credentials return `401` with a `WWW-Authenticate` header. Import reads always include the authenticated `account_id`, so one account cannot read another account's rows.
