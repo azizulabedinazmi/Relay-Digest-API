@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="1200" height="320">
+  <defs>
+    <style>
+      .job{animation:mv 4s linear infinite}.j2{animation-delay:-1.33s}.j3{animation-delay:-2.66s}
+      @keyframes mv{0%{transform:translateX(0);opacity:0;fill:#facc15}10%{opacity:1}45%{transform:translateX(140px);fill:#facc15}55%{transform:translateX(140px);fill:#4ade80}90%{opacity:1}100%{transform:translateX(290px);opacity:0;fill:#4ade80}}
+      .hand{animation:rot 4s linear infinite;transform-origin:0 0}@keyframes rot{to{transform:rotate(360deg)}}
+      .cur{animation:b 1s steps(1) infinite}@keyframes b{50%{opacity:0}}
+    </style>
+  </defs>
+  <rect width="1200" height="320" fill="#0a0a0a"/>
+  <rect x="24" y="20" width="1152" height="280" rx="12" fill="#111" stroke="#262626"/>
+  <g transform="translate(48 46)"><circle r="7" fill="#ef4444"/><circle cx="22" r="7" fill="#eab308"/><circle cx="44" r="7" fill="#22c55e"/></g>
+  <text x="600" y="51" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="13" fill="#525252">relay/digest — zsh</text>
+  <g font-family="Consolas, Menlo, monospace">
+    <text x="60" y="140" font-size="78" font-weight="700" fill="#e5e5e5">relay<tspan fill="#4ade80">/</tspan>digest</text>
+    <text x="62" y="186" font-size="17" fill="#a3a3a3"><tspan fill="#4ade80">$</tspan> POST /api/imports <tspan fill="#facc15">→ 202 Accepted</tspan></text>
+    <text x="62" y="214" font-size="17" fill="#a3a3a3"><tspan fill="#4ade80">$</tspan> cron /api/cron/process <tspan fill="#4ade80">→ completed</tspan><tspan class="cur" fill="#e5e5e5"> █</tspan></text>
+    <text x="62" y="266" font-size="14" fill="#525252"># queued CSV imports · idempotent · Postgres · Vercel Cron</text>
+  </g>
+  <!-- pipeline -->
+  <g transform="translate(640 80)" font-family="Consolas, Menlo, monospace" font-size="13">
+    <rect x="0" y="40" width="110" height="60" rx="8" fill="none" stroke="#525252"/><text x="55" y="76" text-anchor="middle" fill="#a3a3a3">CSV in</text>
+    <rect x="200" y="30" width="130" height="80" rx="8" fill="#1c1917" stroke="#facc15"/><text x="265" y="60" text-anchor="middle" fill="#facc15">queue</text>
+    <g fill="#facc15" opacity=".6"><rect x="220" y="74" width="20" height="20" rx="3"/><rect x="245" y="74" width="20" height="20" rx="3"/><rect x="270" y="74" width="20" height="20" rx="3"/></g>
+    <rect x="420" y="40" width="110" height="60" rx="8" fill="none" stroke="#4ade80"/><text x="475" y="76" text-anchor="middle" fill="#4ade80">digest</text>
+    <path d="M110 70h90M330 70h90" stroke="#404040" stroke-width="2" stroke-dasharray="5 5"/>
+    <g transform="translate(118 62)"><rect class="job" width="16" height="16" rx="3"/><rect class="job j2" width="16" height="16" rx="3"/><rect class="job j3" width="16" height="16" rx="3"/></g>
+    <g transform="translate(265 165)"><circle r="26" fill="none" stroke="#4ade80" stroke-width="2"/><line x1="0" y1="0" x2="0" y2="-12" stroke="#a3a3a3" stroke-width="3"/><line class="hand" x1="0" y1="0" x2="0" y2="-20" stroke="#4ade80" stroke-width="2"/></g>
+    <text x="305" y="170" fill="#525252">*/5 * * * *</text>
+  </g>
+</svg>
